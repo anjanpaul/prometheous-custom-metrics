@@ -5,4 +5,4 @@ metadata:
   namespace: monitoring
 type: Opaque
 stringData:
-  slack-api-url: 'https://hooks.slack.com/services/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'
+  slack-api-url: 'url'
