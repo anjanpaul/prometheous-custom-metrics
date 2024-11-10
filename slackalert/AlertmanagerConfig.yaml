@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: main-rules-alert-config
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  route:
+    receiver: 'null'
+    routes:
+    - matchers:
+      - name: alertname
+        value: PodRestart
+      receiver: 'send-slack'
+  receivers:
+  - name: 'send-slack'
+    slackConfigs:
+    - sendResolved: true
+      channel: '#your-channel'  # Replace with your actual Slack channel name
+      title: "[{{ .Status }}] {{ .CommonLabels.alertname }}"
+      text: "{{ range .Alerts }}Alert: *{{ .Annotations.summary }}*\nDescription: {{ .Annotations.description }}\nSeverity: {{ .Labels.severity }}\n{{ end }}"
+      apiURL:
+        key: slack-api-url
+        name: slack-webhook-secret
+  - name: 'null'
